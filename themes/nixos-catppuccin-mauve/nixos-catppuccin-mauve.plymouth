@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=nixos-catppuccin-mauve
+Description=Catppuccin Mocha Mauve splash screen.
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/nixos-catppuccin-mauve
+ScriptFile=/usr/share/plymouth/themes/nixos-catppuccin-mauve/nixos-catppuccin-mauve.script
