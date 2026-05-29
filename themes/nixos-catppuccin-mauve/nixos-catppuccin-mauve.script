@@ -7,9 +7,9 @@ Window.SetBackgroundBottomColor(0.118, 0.118, 0.180);
 
 # ---- Logo ----
 logo.image = Image("logo.png");
-mode = Plymouth.GetMode();
+global.mode = Plymouth.GetMode();
 
-if (mode == "shutdown") {
+if (global.mode == "shutdown") {
   logo_size = 256;
   logo.image = logo.image.Scale(logo_size, logo_size);
 }
@@ -21,7 +21,11 @@ logo.display_w = logo.image.GetWidth();
 logo.display_h = logo.image.GetHeight();
 logo.sprite.SetPosition(logo.center_x - logo.display_w / 2,
                         logo.center_y - logo.display_h / 2, 0);
-logo.sprite.SetOpacity(1);
+if (global.mode == "shutdown") {
+  logo.sprite.SetOpacity(0.75);
+} else {
+  logo.sprite.SetOpacity(1);
+}
 
 # Use these to adjust the progress bar timing
 global.fake_progress_limit = 0.7;
@@ -38,6 +42,17 @@ global.max_progress = 0.0;
 
 fun refresh_callback() {
   global.animation_frame++;
+
+  # Subtle glow pulse on shutdown
+  if (global.mode == "shutdown") {
+    t = global.animation_frame % 120;
+    if (t < 60) {
+      pulse = t / 60.0;
+    } else {
+      pulse = 2.0 - t / 60.0;
+    }
+    logo.sprite.SetOpacity(0.75 + 0.25 * pulse);
+  }
 
   # Fake progress animation
   if (global.fake_progress_active == 1) {
