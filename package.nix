@@ -2,7 +2,6 @@
   lib,
   stdenv,
   imagemagick,
-  librsvg,
 }:
 
 stdenv.mkDerivation {
@@ -11,7 +10,6 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     imagemagick
-    librsvg
   ];
 
   dontUnpack = true;
@@ -23,8 +21,10 @@ stdenv.mkDerivation {
 
     cp $themeDir/*.plymouth ./
     cp $themeDir/*.script ./
+    cp $themeDir/NixOS-Logo.png ./
 
-    rsvg-convert -w 512 -h 512 -a $themeDir/logo.svg -o logo.png
+    convert NixOS-Logo.png -resize 512x512 logo.png
+    rm -f NixOS-Logo.png
 
     convert -size 7x7 xc:none \
       -fill '#cba6f7' \
@@ -71,10 +71,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Catppuccin Mocha Mauve Plymouth theme for NixOS";
     longDescription = ''
-      A Plymouth boot splash theme for NixOS featuring a custom geometric
-      snowflake logo in Catppuccin Mocha Mauve (#cba6f7). Based on the
-      Omarchy Plymouth theme design with smooth fake-progress animation,
-      password dialog, and multi-monitor support.
+      A Plymouth boot splash theme for NixOS featuring the NixOS logo
+      in Catppuccin Mocha Mauve (#cba6f7). Based on the Omarchy Plymouth
+      theme design with smooth fake-progress animation, password dialog,
+      and multi-monitor support.
     '';
     homepage = "https://github.com/your-username/plymouth-nix";
     license = licenses.mit;
