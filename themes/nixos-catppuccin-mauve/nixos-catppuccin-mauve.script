@@ -23,21 +23,6 @@ logo.sprite.SetPosition(logo.center_x - logo.display_w / 2,
                         logo.center_y - logo.display_h / 2, 0);
 logo.sprite.SetOpacity(1);
 
-# ---- NixOS Text ----
-nixos.image = Image.Text("NixOS", 0.792, 0.651, 0.969);
-nixos_scale = 2.5;
-nixos.w = Math.Int(nixos.image.GetWidth() * nixos_scale);
-nixos.h = Math.Int(nixos.image.GetHeight() * nixos_scale);
-nixos.scaled = nixos.image.Scale(nixos.w, nixos.h);
-nixos.sprite = Sprite(nixos.scaled);
-nixos.sprite.SetPosition(Window.GetWidth() / 2 - nixos.w / 2,
-                         logo.center_y - logo.display_h / 2 - nixos.h - 50,
-                         99);
-nixos.sprite.SetOpacity(1);
-
-# ---- Spinning & pulse control ----
-global.spin_active = 1;
-
 # Use these to adjust the progress bar timing
 global.fake_progress_limit = 0.7;
 global.fake_progress_duration = 15.0;
@@ -53,26 +38,6 @@ global.max_progress = 0.0;
 
 fun refresh_callback() {
   global.animation_frame++;
-
-  # Spin the logo
-  if (global.spin_active == 1) {
-    angle = global.animation_frame * 3.0;
-    rotated = logo.image.Rotate(angle);
-    logo.sprite.SetImage(rotated);
-    logo.sprite.SetX(logo.center_x - rotated.GetWidth() / 2);
-    logo.sprite.SetY(logo.center_y - rotated.GetHeight() / 2);
-  }
-
-  # Pulse the NixOS text (triangle wave)
-  if (global.spin_active == 1) {
-    t = global.animation_frame % 80;
-    if (t < 40) {
-      pulse = 0.6 + 0.4 * (t / 40.0);
-    } else {
-      pulse = 1.0 - 0.4 * ((t - 40) / 40.0);
-    }
-    nixos.sprite.SetOpacity(pulse);
-  }
 
   # Fake progress animation
   if (global.fake_progress_active == 1) {
@@ -166,10 +131,6 @@ bullet.sprites = [];
 fun display_normal_callback() {
   hide_password_dialog();
 
-  if (global.password_shown == 1) {
-    global.spin_active = 1;
-  }
-
   mode = Plymouth.GetMode();
 
   if ((mode == "boot" || mode == "resume") && global.password_shown == 1) {
@@ -182,9 +143,6 @@ fun display_normal_callback() {
 
 fun display_password_callback(prompt, bullets) {
   global.password_shown = 1;
-
-  global.spin_active = 0;
-  nixos.sprite.SetOpacity(0);
 
   stop_fake_progress();
   hide_progress_bar();

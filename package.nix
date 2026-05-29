@@ -71,9 +71,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Catppuccin Mocha Mauve Plymouth theme for NixOS";
     longDescription = ''
-      A Plymouth boot splash theme for NixOS featuring the NixOS logo
+      A Plymouth boot splash theme for NixOS featuring a static NixOS logo
       in Catppuccin Mocha Mauve (#cba6f7). Based on the Omarchy Plymouth
-      theme design with smooth fake-progress animation, password dialog,
+      theme design with smooth fake-progress animation, LUKS password dialog,
       and multi-monitor support.
     '';
     homepage = "https://github.com/your-username/plymouth-nix";
